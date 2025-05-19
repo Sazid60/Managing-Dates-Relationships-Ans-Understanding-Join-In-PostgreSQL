@@ -251,6 +251,74 @@ CREATE TABLE "user" (
 CREATE TABLE post (
     id serial PRIMARY KEY,
     title TEXT NOT NULL,
-    user_id INTEGER REFERENCES "user" (id)
+    user_id INTEGER REFERENCES "user" (id) NOT Null
 )
+
 ```
+
+## 9-4 Enforcing Referential Integrity: Behaviors During Data Insertion
+
+- lets see the data we have inserted
+
+```sql
+
+-- Insert users
+INSERT INTO "user" (username) VALUES
+('alice'),
+('bob'),
+('charlie'),
+('diana');
+
+-- Insert posts
+INSERT INTO
+    post (title, user_id)
+VALUES ('Alice first post', 1),
+    ('Bob travel blog', 2),
+    ('Charlie on coding', 3),
+    ('Alice second post', 1),
+    ('Diana book review', 4),
+    (
+        'Another tech tip from Bob',
+        2
+    );
+
+SELECT * from "user";
+SELECT * from post;
+```
+
+- during the insert of data who has dependency with foreign key, we have to make sure that the foreign key should exist in where it is coming from. I we do not do there will be no data integrity. validation is done so this will show error.
+
+#### During the insertion there can be many cases.
+
+1. attempting to insert a post with a user id that does not exist. this will show error of foreign key violation
+
+```sql
+INSERT INTO post (title, user_id) VALUES
+('Alice  first post', 100)
+```
+
+2. Inserting a post with a valid user id
+
+```sql
+INSERT INTO post (title, user_id) VALUES
+('Alice  first post', 1)
+```
+
+3. Attempting to insert a post without specifying a user id.
+
+```sql
+INSERT INTO post (title, user_id) VALUES
+('Alice  first post', null)
+```
+
+- this is not a good thing, we have to prevent this using constrain `not null`
+
+```sql
+ALTER table post
+alter column user_id set NOT Null;
+```
+
+#### Lets See the behavior while deleting foreign key related table.
+
+- suppose we want to delete the user but the post is having the deleted users user id. this is happening data inconsistency and data integrity is not maintained.
+- these default behavior we can control if we want. like if we delete a user the post of the user will be also deleted. or we can say something like if the user is deleted the post's user id will become null. or we can do something like if user is deleted we can set default value to the post user_id. or we can say something like the posts should be deleted before the deletion of the user.
