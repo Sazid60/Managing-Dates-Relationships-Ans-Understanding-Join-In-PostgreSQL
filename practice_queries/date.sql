@@ -87,3 +87,30 @@ CREATE TABLE post (
     title TEXT NOT NULL,
     user_id INTEGER REFERENCES "user" (id)
 )
+
+-- Insert users
+INSERT INTO
+    "user" (username)
+VALUES ('alice'),
+    ('bob'),
+    ('charlie'),
+    ('diana');
+
+-- Insert posts
+INSERT INTO
+    post (title, user_id)
+VALUES ('Alice first post', 1),
+    ('Bob travel blog', 2),
+    ('Charlie on coding', 3),
+    ('Alice second post', 1),
+    ('Diana book review', 4),
+    (
+        'Another tech tip from Bob',
+        2
+    );
+
+SELECT * FROM "user";
+
+SELECT * FROM post;
+
+ALTER TABLE post ALTER COLUMN user_id SET NOT NULL;
