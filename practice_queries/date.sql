@@ -227,3 +227,5 @@ right outer JOIN "user" ON post.user_id = "user".id;
 
 SELECT * FROM post 
 FULL OUTER JOIN "user" on post.user_id = "user".id
+
+
