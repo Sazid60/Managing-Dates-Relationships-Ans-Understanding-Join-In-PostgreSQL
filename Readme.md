@@ -322,3 +322,52 @@ alter column user_id set NOT Null;
 
 - suppose we want to delete the user but the post is having the deleted users user id. this is happening data inconsistency and data integrity is not maintained.
 - these default behavior we can control if we want. like if we delete a user the post of the user will be also deleted. or we can say something like if the user is deleted the post's user id will become null. or we can do something like if user is deleted we can set default value to the post user_id. or we can say something like the posts should be deleted before the deletion of the user.
+
+## 9-5 Enforcing Referential Integrity: Behaviors During Data Deletion
+
+#### Behaviors During Data Deletion
+
+1. Cascading deletion --> `ON DELETE CASCADE` : When user is deleted delete the user posts as well.
+
+```sql
+CREATE TABLE post (
+    id serial PRIMARY KEY,
+    title TEXT NOT NULL,
+    user_id INTEGER REFERENCES "user" (id) ON DELETE CASCADE
+)
+```
+
+2. Setting Null --> `ON DELETE SET NULL` : When user is deleted SET THE POSTS USER_ID `NULL`
+
+```sql
+CREATE TABLE post (
+    id serial PRIMARY KEY,
+    title TEXT NOT NULL,
+    user_id INTEGER REFERENCES "user" (id) ON DELETE SET NULL
+)
+```
+
+3. Restrict Deletion --> `ON DELETE RESTRICT` / `ON DELETE NO ACTION` (default) : After the deletion of the posts of the user, then user will be deletable. basically we will not do it.
+
+```sql
+DELETE from "user"
+WHERE id = 4;
+```
+
+```sql
+CREATE TABLE post (
+    id serial PRIMARY KEY,
+    title TEXT NOT NULL,
+    user_id INTEGER REFERENCES "user" (id) ON DELETE RESTRICT
+)
+```
+
+1. set Default Value --> `ON DELETE SET DEFAULT` : Will set a default value in the user_id of the post which user has been deleted. this is not also practical.
+
+```sql
+CREATE TABLE post (
+    id serial PRIMARY KEY,
+    title TEXT NOT NULL,
+    user_id INTEGER REFERENCES "user"(id) ON DELETE SET DEFAULT  DEFAULT 2
+)
+```

@@ -114,3 +114,55 @@ SELECT * FROM "user";
 SELECT * FROM post;
 
 ALTER TABLE post ALTER COLUMN user_id SET NOT NULL;
+
+DELETE FROM "user" WHERE id = 4;
+
+DROP TABLE post;
+
+DROP TABLE "user";
+
+CREATE TABLE "user" (
+    id serial PRIMARY KEY,
+    username VARCHAR(25) NOT NULL
+)
+
+CREATE TABLE post (
+    id serial PRIMARY KEY,
+    title TEXT NOT NULL,
+    user_id INTEGER REFERENCES "user" (id) ON DELETE CASCADE
+)
+
+INSERT INTO
+    "user" (username)
+VALUES ('alice'),
+    ('bob'),
+    ('charlie'),
+    ('diana');
+
+INSERT INTO
+    post (title, user_id)
+VALUES ('Alice first post', 1),
+    ('Bob travel blog', 2),
+    ('Charlie on coding', 3),
+    ('Alice second post', 1),
+    ('Diana book review', 4),
+    (
+        'Another tech tip from Bob',
+        2
+    );
+
+DELETE FROM "user" WHERE id = 4;
+
+SELECT * FROM post
+
+CREATE TABLE post (
+    id serial PRIMARY KEY,
+    title TEXT NOT NULL,
+    user_id INTEGER REFERENCES "user" (id) ON DELETE SET NULL
+)
+
+CREATE TABLE post (
+    id serial PRIMARY KEY,
+    title TEXT NOT NULL,
+    user_id INTEGER REFERENCES "user" (id) ON DELETE SET DEFAULT DEFAULT 2
+)
