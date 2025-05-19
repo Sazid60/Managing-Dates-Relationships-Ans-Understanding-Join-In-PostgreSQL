@@ -371,3 +371,85 @@ CREATE TABLE post (
     user_id INTEGER REFERENCES "user"(id) ON DELETE SET DEFAULT  DEFAULT 2
 )
 ```
+
+## 9-6 Joining Tables with Inner Join
+
+![alt text](<WhatsApp Image 2025-05-19 at 14.57.22_f38e5ee3.jpg>)
+
+#### Now lets retrieve all posts title with their user name using `Join`.
+
+```sql
+SELECT title, username FROM post;
+```
+
+- we can not do this since post table is not holding the username data, its just holding users foreign keys.
+
+- the post table do not con tain `username` as well user table do not contain the `title`
+- we can see both using `Join`. we can Do joining using foreign key.
+
+```sql
+SELECT title, username FROM post
+JOIN "user" ON post.user_id = "user".id
+```
+
+- because of doing joining user and post(primary table) table has been combined.
+- first keeps the primary table values
+- then according to the primary tables user id finds the username and keep beside the user id of the primary table
+- finally gives us what we need.
+
+![alt text](<WhatsApp Image 2025-05-19 at 15.20.36_3cb376b4.jpg>)
+
+![alt text](<WhatsApp Image 2025-05-19 at 15.23.38_8a3ef4da.jpg>)
+
+![alt text](<WhatsApp Image 2025-05-19 at 15.24.16_4b009f95.jpg>)
+
+![alt text](<WhatsApp Image 2025-05-19 at 15.24.53_ae5cd64c.jpg>)
+
+#### I we want to see all the data with the user name
+
+```sql
+SELECT * from post
+JOIN "user" ON post.user_id = "user".id
+```
+
+#### lets learn about context
+
+- After doing join we have got a combined table. here we have 2 `id`. id of user and if of post.
+- if we want to see the id this will show us error saying `column reference "id" is ambiguous`.
+
+```sql
+SELECT id FROM post
+JOIN "user" ON post.user_id = "user".id
+```
+
+![alt text](image-8.png)
+
+- we have to manage it by providing `context` that the which tables id should he show.
+
+```sql
+SELECT post.id FROM post JOIN "user" ON post.user_id = "user".id;
+SELECT "user".id FROM post JOIN "user" ON post.user_id = "user".id;
+```
+
+- we are setting context that whose id it will be.
+- where the table names are lengthy we can do aliasing.
+
+```sql
+SELECT p.id FROM post p
+JOIN "user" u ON p.user_id = u.id;
+
+-- we will use as as well.
+SELECT * FROM post as p
+JOIN "user" as u ON p.user_id = u.id;
+```
+
+- the `title` and `username` showing is said `inner join`
+
+![alt text](<WhatsApp Image 2025-05-19 at 15.44.48_423d32c8.jpg>)
+
+- whatever we have done we can say `INNER JOIN` Instead Of `JOIN`
+
+```sql
+SELECT id FROM post
+INNER JOIN "user" ON post.user_id = "user".id
+```
