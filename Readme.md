@@ -453,3 +453,102 @@ JOIN "user" as u ON p.user_id = u.id;
 SELECT id FROM post
 INNER JOIN "user" ON post.user_id = "user".id
 ```
+
+## 9-7 Understanding Left and Right Joins
+
+```sql
+SELECT * FROM post
+INNER JOIN "user" ON post.user_id = "user".id;
+```
+
+![alt text](image-9.png)
+
+```sql
+SELECT * FROM "user"
+INNER JOIN post ON post.user_id = "user".id;
+```
+
+![alt text](image-10.png)
+
+- here swapping the place of post and user is not impacting just changing the table column position.
+- This order do not matter now but when the order will be an issue and then based on the situation two type of joining is required
+
+  1. Left Join
+  2. Right Join
+
+- suppose we want to add a post whose user_id will be `null` the order will be issue then.
+
+```sql
+INSERT INTO post (title, user_id) VALUES ('Alice first post', NULL);
+```
+
+![alt text](image-11.png)
+
+```sql
+SELECT * FROM post INNER JOIN "user" ON post.user_id = "user".id;
+```
+
+![alt text](image-12.png)
+
+- we can see twh post whose user_id was `null` is not coming after doing the `inner join`.
+
+##### so why this is happening?
+
+- In the combined table while doing the inner join there only the values kept which matches the condition is given `post.user_id = "user".id`.
+- In case of `null` user_id it could not match with any id of the `user` table so it did not sow in the combined table.
+- same goes to id who have not posted their name is not kept.
+- Basically it filter outs the things those do not met the condition
+
+![alt text](<WhatsApp Image 2025-05-19 at 16.37.40_40790be3.jpg>)
+
+#### `LEFT JOIN` Usage
+
+- suppose we want the thing like even if the user_id is `null` we want to see the post
+- this might happen when its not a post of a user its the post of a company.
+- In this situation we have to use `LEFT JOIN`
+
+![alt text](<WhatsApp Image 2025-05-19 at 16.41.41_8bc208ca.jpg>)
+
+- so what is left table? the table we have wrote first. marked in teh picture.
+  ![alt text](image-13.png)
+
+- while doing the `LEFT JOIN` we have to keep all the data of left table.
+- As its a combined table then it will fill the not found columns with `NULL`
+
+![alt text](<WhatsApp Image 2025-05-19 at 16.45.22_20a45243.jpg>)
+
+```sql
+SELECT * FROM post
+LEFT JOIN "user" ON post.user_id = "user".id;
+```
+
+![alt text](image-14.png)
+
+#### `RIGHT JOIN` Usage
+
+![alt text](<WhatsApp Image 2025-05-19 at 16.51.44_d28705fa.jpg>)
+
+- In case of Right join Right table will get priority.
+- All data of right table will be kept, which data is not found in left table will be ste null.
+
+![alt text](<WhatsApp Image 2025-05-19 at 16.54.01_6c884696.jpg>)
+
+![alt text](<WhatsApp Image 2025-05-19 at 16.54.20_5d1895ce.jpg>)
+
+```sql
+SELECT * FROM post
+right JOIN "user" ON post.user_id = "user".id;
+```
+
+![alt text](image-15.png)
+
+- In case of `LEFT JOIN` and `RIGHT JOIN` Order matters.
+- we can tell `LEFT JOIN` and `RIGHT JOIN` like `LEFT OUTER JOIN` and `RIGHT OUTER JOIN`. both are same
+
+```sql
+SELECT * FROM post
+LEFT OUTER JOIN "user" ON post.user_id = "user".id;
+
+SELECT * FROM post
+right outer JOIN "user" ON post.user_id = "user".id;
+```

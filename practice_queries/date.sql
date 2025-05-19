@@ -132,12 +132,14 @@ CREATE TABLE post (
     user_id INTEGER REFERENCES "user" (id) ON DELETE CASCADE
 )
 
-INSERT INTO
-    "user" (username)
+INSERT INTO  "user" (username)
 VALUES ('alice'),
     ('bob'),
     ('charlie'),
     ('diana');
+
+INSERT INTO  "user" (username)
+VALUES ('sazid');
 
 INSERT INTO
     post (title, user_id)
@@ -179,14 +181,46 @@ SELECT title, username
 FROM post
     JOIN "user" ON post.user_id = "user".id;
 
-SELECT * FROM post JOIN "user" ON post.user_id = "user".id;
+SELECT * FROM post 
+JOIN "user" ON post.user_id = "user".id;
 
-SELECT id FROM post JOIN "user" ON post.user_id = "user".id;
+SELECT id FROM post 
+JOIN "user" ON post.user_id = "user".id;
 
-SELECT post.id FROM post JOIN "user" ON post.user_id = "user".id;
+SELECT post.id FROM post 
+JOIN "user" ON post.user_id = "user".id;
 
-SELECT "user".id FROM post JOIN "user" ON post.user_id = "user".id;
+SELECT "user".id FROM post 
+JOIN "user" ON post.user_id = "user".id;
 
-SELECT p.id FROM post p JOIN "user" u ON p.user_id = u.id;
+SELECT p.id FROM post p 
+JOIN "user" u ON p.user_id = u.id;
 
-SELECT * FROM post p JOIN "user" u ON p.user_id = u.id;
+SELECT * FROM post p 
+JOIN "user" u ON p.user_id = u.id;
+
+SELECT * FROM post 
+INNER JOIN "user" ON post.user_id = "user".id;
+
+SELECT * FROM "user" 
+INNER JOIN post ON post.user_id = "user".id;
+
+SELECT * FROM post;
+
+INSERT INTO post (title, user_id) 
+VALUES ('Alice first post', NULL);
+
+SELECT * FROM post 
+INNER JOIN "user" ON post.user_id = "user".id;
+
+SELECT * FROM post 
+LEFT JOIN "user" ON post.user_id = "user".id;
+
+SELECT * FROM post 
+right JOIN "user" ON post.user_id = "user".id;
+
+SELECT * FROM post 
+LEFT OUTER JOIN "user" ON post.user_id = "user".id;
+
+SELECT * FROM post 
+right outer JOIN "user" ON post.user_id = "user".id;
