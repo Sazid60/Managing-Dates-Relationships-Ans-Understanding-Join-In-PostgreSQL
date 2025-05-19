@@ -217,3 +217,40 @@ SELECT extract(year from dob) as birth_year, count(*)
 FROM students
 GROUP BY birth_year;
 ```
+
+## 9-3 Constructing Relationships with Foreign Key Constraints
+
+- `Foreign Key` Is Important to make relationship between different tables.
+
+![alt text](<WhatsApp Image 2025-05-19 at 12.03.06_8d7c16a8.jpg>)
+
+- `primary key` is used to identifying a data uniquely
+- `Foreign Key` also uniquely identify a row uniquely but other table from where it came.
+
+![alt text](<WhatsApp Image 2025-05-19 at 12.18.00_b2981c21.jpg>)
+
+- we are defining `user_id INTEGER REFERENCES user(id)`.
+
+- now tels do something like `retrieve all posts for user with id 4`
+
+```sql
+SELECT * FROM Post
+where user_id = 4;
+```
+
+- this is ok but we want to see the `title` of post table and the `username` which is in user table.
+
+- lets create the tables
+
+```sql
+CREATE TABLE "user" (
+    id serial PRIMARY KEY,
+    username VARCHAR(25) NOT NULL
+)
+
+CREATE TABLE post (
+    id serial PRIMARY KEY,
+    title TEXT NOT NULL,
+    user_id INTEGER REFERENCES "user" (id)
+)
+```
