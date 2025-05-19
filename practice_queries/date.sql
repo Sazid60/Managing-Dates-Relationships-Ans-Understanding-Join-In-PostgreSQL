@@ -114,3 +114,113 @@ SELECT * FROM "user";
 SELECT * FROM post;
 
 ALTER TABLE post ALTER COLUMN user_id SET NOT NULL;
+
+DELETE FROM "user" WHERE id = 4;
+
+DROP TABLE post;
+
+DROP TABLE "user";
+
+CREATE TABLE "user" (
+    id serial PRIMARY KEY,
+    username VARCHAR(25) NOT NULL
+)
+
+CREATE TABLE post (
+    id serial PRIMARY KEY,
+    title TEXT NOT NULL,
+    user_id INTEGER REFERENCES "user" (id) ON DELETE CASCADE
+)
+
+INSERT INTO  "user" (username)
+VALUES ('alice'),
+    ('bob'),
+    ('charlie'),
+    ('diana');
+
+INSERT INTO  "user" (username)
+VALUES ('sazid');
+
+INSERT INTO
+    post (title, user_id)
+VALUES ('Alice first post', 1),
+    ('Bob travel blog', 2),
+    ('Charlie on coding', 3),
+    ('Alice second post', 1),
+    ('Diana book review', 4),
+    (
+        'Another tech tip from Bob',
+        2
+    );
+
+DELETE FROM "user" WHERE id = 4;
+
+SELECT * FROM post
+
+SELECT * FROM "user"
+
+CREATE TABLE post (
+    id serial PRIMARY KEY,
+    title TEXT NOT NULL,
+    user_id INTEGER REFERENCES "user" (id) ON DELETE SET NULL
+)
+
+CREATE TABLE post (
+    id serial PRIMARY KEY,
+    title TEXT NOT NULL,
+    user_id INTEGER REFERENCES "user" (id) ON DELETE SET DEFAULT DEFAULT 2
+)
+
+SELECT * FROM post
+
+SELECT * FROM "user"
+
+SELECT title, username FROM post;
+
+SELECT title, username
+FROM post
+    JOIN "user" ON post.user_id = "user".id;
+
+SELECT * FROM post 
+JOIN "user" ON post.user_id = "user".id;
+
+SELECT id FROM post 
+JOIN "user" ON post.user_id = "user".id;
+
+SELECT post.id FROM post 
+JOIN "user" ON post.user_id = "user".id;
+
+SELECT "user".id FROM post 
+JOIN "user" ON post.user_id = "user".id;
+
+SELECT p.id FROM post p 
+JOIN "user" u ON p.user_id = u.id;
+
+SELECT * FROM post p 
+JOIN "user" u ON p.user_id = u.id;
+
+SELECT * FROM post 
+INNER JOIN "user" ON post.user_id = "user".id;
+
+SELECT * FROM "user" 
+INNER JOIN post ON post.user_id = "user".id;
+
+SELECT * FROM post;
+
+INSERT INTO post (title, user_id) 
+VALUES ('Alice first post', NULL);
+
+SELECT * FROM post 
+INNER JOIN "user" ON post.user_id = "user".id;
+
+SELECT * FROM post 
+LEFT JOIN "user" ON post.user_id = "user".id;
+
+SELECT * FROM post 
+right JOIN "user" ON post.user_id = "user".id;
+
+SELECT * FROM post 
+LEFT OUTER JOIN "user" ON post.user_id = "user".id;
+
+SELECT * FROM post 
+right outer JOIN "user" ON post.user_id = "user".id;
