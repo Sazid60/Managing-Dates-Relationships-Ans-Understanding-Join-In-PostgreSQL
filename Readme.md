@@ -552,3 +552,89 @@ LEFT OUTER JOIN "user" ON post.user_id = "user".id;
 SELECT * FROM post
 right outer JOIN "user" ON post.user_id = "user".id;
 ```
+
+## 9-8 Exploring Full, Cross, and Natural Joins
+
+#### `FULL JOIN` Usage
+
+- `FULL JOIN` Means we have to keep all the data weather the condition is met or not.
+- Where the condition is not met, its filled with null.
+
+![alt text](<WhatsApp Image 2025-05-19 at 17.11.30_60bfcb5d.jpg>)
+
+```sql
+SELECT * FROM post
+FULL OUTER JOIN "user" on post.user_id = "user".id
+```
+
+![alt text](image-16.png)
+
+- lets summarize the joins
+
+![alt text](<WhatsApp Image 2025-05-19 at 17.21.30_d111a16c.jpg>)
+
+- there are some `join` except those.
+
+- lets insert the data first
+
+```sql
+CREATE TABLE employees(
+    emp_id INT,
+    emp_name VARCHAR(50),
+    dept_id INT
+);
+
+CREATE TABLE departments(
+    dept_id INT,
+    dept_name VARCHAR(50)
+);
+
+DROP table employees
+
+INSERT INTO employees VALUES(1,'John Doe', 101);
+INSERT INTO employees VALUES(2,'Jane Smith', 102);
+
+INSERT INTO departments VALUES( 102,'Marketing');
+INSERT INTO departments VALUES( 101,'Human Resources');
+
+SELECT * FROM employees;
+
+SELECT * FROM departments;
+```
+
+#### `Cross Join` Usage
+
+- A Cross Join (also called a Cartesian Join) is a type of SQL join that returns every combination of rows from two tables.
+- here we do not need to tell condition
+
+![alt text](<WhatsApp Image 2025-05-19 at 17.34.52_441527f9.jpg>)
+
+```sql
+SELECT * FROM employees
+CROSS JOIN departments;
+```
+
+![alt text](image-17.png)
+
+#### `NATURAL JOIN` Usage
+
+- A NATURAL JOIN is a type of SQL join that automatically joins tables based on columns with the same names and compatible data types in both tables.
+- while doing the `natural join` we need a common column in both table.
+- In postgres if there is no common column between two table it will do `cross join` instead of `Natural Join`
+
+##### so? how does the `natural join` works?
+
+- first of all it does the `cross join` and then the common columns values which are equal are kept others are filtered.
+
+![alt text](image-19.png)
+![alt text](<WhatsApp Image 2025-05-19 at 17.46.48_e7f83a99.jpg>)
+
+- after doing filtering it keep one column among the common column and then the column is shifted to the first column of the table.
+  ![alt text](<WhatsApp Image 2025-05-19 at 17.47.54_a416df6a.jpg>)
+
+```sql
+SELECT * FROM employees
+NATURAL JOIN departments;
+```
+
+![alt text](image-18.png)
