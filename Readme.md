@@ -103,7 +103,9 @@ SELECT CURRENT_DATE - INTERVAL '1 month'
 SELECT CURRENT_DATE - INTERVAL '1 year 2 month'
 ```
 
-#### suppose we have date now we want to calculate the age using `age()`.
+#### `age()` with dates
+
+- suppose we have date now we want to calculate the age using `age()`.
 
 ```sql
 SELECT age(CURRENT_DATE,'1997-07-02')
@@ -136,3 +138,82 @@ SELECT '0' :: BOOLEAN
 ```
 
 - its similar like type casting like nwe are telling `0` will be boolean type. the casting must be logical.
+
+## 9-2 Grouping and Filtering Data with GROUP BY and HAVING
+
+#### `GROUP BY` Usage
+
+- `aggregate` function is used basically with `group by` clause
+- `group by` dose something like we have a lot of data and now we want to do grouping country wise. iF we want to do group by using blood group we can do this.
+
+```sql
+SELECT * FROM students
+GROUP BY country;
+```
+
+![alt text](image-3.png)
+
+- this is showing error because we are telling to show all the rows using `*`
+- so the proper way of grouping is
+
+```sql
+
+SELECT country FROM students
+GROUP BY country;
+```
+
+![alt text](image-5.png)
+
+```sql
+SELECT country,age FROM students
+GROUP BY country;
+```
+
+![alt text](image-4.png)
+
+- This also shows the error, since age must be in group by or we have to use aggregate function.
+- this is happening age is not relevant to the country groups , does not understand whose age should be shown,
+
+- if we want to see how many students are in each country we acn see that.
+
+```sql
+SELECT country, count(*) FROM students
+GROUP BY country;
+```
+
+![alt text](image-6.png)
+
+- here `count(*)` is acting differently. rather than counting all the students together its counting each grouped countries students and showing.
+
+- this happening because group by works in split,apply and combine procedure when we use `aggregate ` function with `group by`.
+
+![alt text](<WhatsApp Image 2025-05-19 at 11.30.56_fbaa4d2b.jpg>)
+
+- now lets see country wise students average age with the country wise student count.
+
+```sql
+SELECT country, count(*), avg(age) from students
+GROUP BY country;
+```
+
+![alt text](image-7.png)
+
+#### `HAVING` Usage
+
+- using `having` we can filter data made by `group by`
+- lets think of like we have grouped using country and saw the average age based on the students of each country, now we want to set a condition like which group has average age greater than 22 show me. `filter groups using having to show only countries with average age above 22`
+
+```sql
+SELECT country, avg(age) FROM  students
+GROUP BY country
+HAVING avg(age) > 22;
+```
+
+- here `where` Condition will not workout since where works row by row.
+- Lets solve this `Count Students Born In Each Year`
+
+```sql
+SELECT extract(year from dob) as birth_year, count(*)
+FROM students
+GROUP BY birth_year;
+```
