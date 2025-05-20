@@ -792,3 +792,215 @@ WHERE EXTRACT(YEAR FROM order_date) = 2025
 GROUP BY order_months;
 
 ```
+
+# 📘 Module-9 Practice Tasks – SQL
+
+This repository contains SQL practice tasks for working with dates, grouping, foreign key constraints, and join operations using the following sample tables:
+
+---
+
+## 📊 Table Structures
+
+### `students`
+
+- `id`: Auto-incremented primary key
+- `name`: Name of the student
+- `department_id`: Foreign key referencing `departments(id)`
+- `last_login`: Last login date
+
+### `departments`
+
+- `id`: Auto-incremented primary key
+- `name`: Department name (e.g., CSE, EEE)
+
+### `courses`
+
+- `id`: Auto-incremented primary key
+- `title`: Course title
+
+---
+
+```SQL
+
+CREATE TABLE departments (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(20)
+);
+
+-- Create courses table
+CREATE TABLE courses (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(20)
+);
+
+-- Create students table
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(20),
+    department_id INTEGER REFERENCES departments(id),
+    last_login DATE DEFAULT CURRENT_DATE
+);
+
+
+INSERT INTO departments (name) VALUES
+('CSE'),
+('EEE'),
+('BBA'),
+('Mechanical'),
+('Civil'),
+('Architecture');
+
+INSERT INTO courses (title) VALUES
+('Database Systems'),
+('Operating Systems'),
+('Digital Logic'),
+('Microeconomics'),
+('Thermodynamics'),
+('Structural Design'),
+('Software Engineering'),
+('Circuit Analysis'),
+('Marketing Basics'),
+('Design Principles');
+
+
+INSERT INTO students (name, department_id, last_login) VALUES
+-- May 2025 logins
+('Alice', 1, '2025-05-15'),
+('Bob', 2, '2025-05-08'),
+('David', 3, '2025-05-17'),
+('Ian', 6, '2025-05-18'),
+('Jane', 1, '2025-05-10'),
+('Karl', 3, '2025-05-19'),
+('Mike', 5, '2025-05-05'),
+('Paul', 2, '2025-05-13'),
+('Tina', 6, '2025-05-12'),
+('Charlie', 1, '2025-04-15'),
+('Frank', 1, '2025-04-22'),
+('Hannah', 5, '2025-04-25'),
+('Luna', 4, '2025-04-19'),
+('Nora', 1, '2025-04-30'),
+('Quinn', 3, '2025-04-28'),
+('Rose', 4, '2025-04-21'),
+('Steve', 5, '2025-04-20'),
+('Oscar', 6, '2025-04-05'),
+('Grace', 2, '2025-03-21'),
+('Yasmin', 3, '2025-03-05'),
+('Zane', 4, '2025-03-29'),
+('Liam', 2, '2025-03-10');
+
+SELECT * FROM students
+
+```
+
+## 📅 Date & Grouping Tasks
+
+1. Retrieve students who have logged in within the last 30 days.
+
+```SQL
+SELECT * FROM students
+WHERE last_login >= CURRENT_DATE - INTERVAL '30 days';
+```
+
+2. Extract the login month from the `last_login` and group students by month.
+
+```sql
+SELECT extract(month from last_login) as login_month, count(*) as students FROM students
+GROUP BY login_month
+```
+
+3. Count how many students logged in per month and show only those months where login count is more than 3.
+
+```SQL
+SELECT extract(month from last_login) as login_month, count(*) as logged_students FROM students
+GROUP BY login_month
+HAVING count(*)  > 4
+```
+
+---
+
+## 🔗 Foreign Key & Constraints
+
+4. Create a foreign key constraint on `department_id` in the `students` table referencing `departments(id)`.
+
+```SQL
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(20),
+    department_id INTEGER REFERENCES departments(id),
+    last_login DATE DEFAULT CURRENT_DATE
+);
+```
+
+5. Try inserting a student with a `department_id` that doesn’t exist and observe the behavior.
+
+```SQL
+INSERT INTO students (name, department_id, last_login) VALUES
+('Alice', 20, '2025-05-15');
+```
+
+6. Delete a department and see how students are affected using ON DELETE CASCADE and ON DELETE SET NULL.
+
+```SQL
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(20),
+    department_id INTEGER REFERENCES departments(id) ON DELETE CASCADE,
+    last_login DATE DEFAULT CURRENT_DATE
+);
+
+SELECT * from departments
+
+SELECT * from students
+
+DELETE from departments WHERE name = 'CSE'
+
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(20),
+    department_id INTEGER REFERENCES departments(id) ON DELETE SET NULL,
+    last_login DATE DEFAULT CURRENT_DATE
+);
+```
+
+## Join Operations (Based on 9-6 to 9-8)
+
+7. Join students and departments using INNER JOIN to display each student's department name.
+
+```SQL
+SELECT * from students
+INNER JOIN departments ON students.id = departments.id
+```
+
+8. Use a LEFT JOIN to show all students including those without a department.
+
+```SQL
+SELECT * from students
+LEFT JOIN departments ON students.id = departments.id;
+```
+
+9. Use a RIGHT JOIN to show all departments including those without students.
+
+```SQL
+SELECT * FROM students
+RIGHT JOIN departments ON students.department_id = departments.id;
+```
+
+10. Perform a FULL JOIN to get all records from both students and departments.
+
+```SQL
+SELECT * FROM students
+FULL JOIN departments ON students.department_id = departments.id;
+```
+
+11. Create a cross-product of all students and courses using CROSS JOIN.
+
+```sql
+SELECT * FROM students
+CROSS JOIN departments;
+```
+
+12. Use NATURAL JOIN between tables that have a shared column like department_id.
+
+```SQL
+
+```

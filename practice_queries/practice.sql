@@ -155,4 +155,156 @@ SELECT extract(month FROM order_date) as order_months, count(order_date) FROM or
 WHERE EXTRACT(YEAR FROM order_date) = 2025
 GROUP BY order_months;
 
+-- practice task
 
+-- Create departments table
+CREATE TABLE departments (
+    department_id SERIAL PRIMARY KEY,
+    name VARCHAR(20)
+);
+
+DROP TABLE departments ;
+-- Create courses table
+CREATE TABLE courses (
+    course_id SERIAL PRIMARY KEY,
+    title VARCHAR(20)
+);
+
+-- Create students table
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(20),
+    department_id INTEGER REFERENCES departments(department_id),
+    last_login DATE DEFAULT CURRENT_DATE
+);
+
+
+INSERT INTO departments (name) VALUES 
+('CSE'),
+('EEE'),
+('BBA'),
+('Mechanical'),
+('Civil'),
+('Architecture');
+
+INSERT INTO departments (name) VALUES 
+('IPE')
+
+INSERT INTO courses (title) VALUES 
+('Database Systems'),
+('Operating Systems'),
+('Digital Logic'),
+('Microeconomics'),
+('Thermodynamics'),
+('Structural Design'),
+('Software Engineering'),
+('Circuit Analysis'),
+('Marketing Basics'),
+('Design Principles');
+
+
+INSERT INTO students (name, department_id, last_login) VALUES
+-- May 2025 logins
+('Alice', 1, '2025-05-15'),
+('Bob', 2, '2025-05-08'),
+('David', 3, '2025-05-17'),
+('Ian', 6, '2025-05-18'),
+('Jane', 1, '2025-05-10'),
+('Karl', 3, '2025-05-19'),
+('Mike', 5, '2025-05-05'),
+('Paul', 2, '2025-05-13'),
+('Tina', 6, '2025-05-12'),
+('Charlie', 1, '2025-04-15'),
+('Frank', 1, '2025-04-22'),
+('Hannah', 5, '2025-04-25'),
+('Luna', 4, '2025-04-19'),
+('Nora', 1, '2025-04-30'),
+('Quinn', 3, '2025-04-28'),
+('Rose', 4, '2025-04-21'),
+('Steve', 5, '2025-04-20'),
+('Oscar', 6, '2025-04-05'),
+('Grace', 2, '2025-03-21'),
+('Yasmin', 3, '2025-03-05'),
+('Zane', 4, '2025-03-29'),
+('Liam', 2, '2025-03-10');
+
+SELECT * FROM students
+
+DROP TABLE students;
+DROP TABLE departments 
+
+DROP table courses
+
+SELECT * FROM students
+WHERE last_login >= CURRENT_DATE - INTERVAL '30 days';
+
+SELECT extract(month from last_login) as login_month, count(*) as logged_students FROM students
+GROUP BY login_month
+HAVING count(*)  > 4
+
+
+
+INSERT INTO students (name, department_id, last_login) VALUES
+('Alice', 20, '2025-05-15');
+
+
+
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(20),
+    department_id INTEGER REFERENCES departments(id) ON DELETE CASCADE,
+    last_login DATE DEFAULT CURRENT_DATE
+);
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(20),
+    department_id INTEGER REFERENCES departments(department_id) ON DELETE SET NULL,
+    last_login DATE DEFAULT CURRENT_DATE
+);
+
+SELECT * from departments
+
+SELECT * from students
+
+DELETE from departments WHERE name = 'CSE'
+
+
+-- Join students and departments using INNER JOIN to display each student's department name.
+
+SELECT * from students
+INNER JOIN departments ON students.department_id = departments.department_id
+
+SELECT * from students
+LEFT JOIN departments ON students.department_id = departments.department_id;
+SELECT * FROM students
+RIGHT JOIN departments ON students.department_id = departments.department_id;
+SELECT * FROM students
+CROSS JOIN departments;
+SELECT * FROM students
+NATURAL JOIN departments;
+
+
+ALTER Table departments
+RENAME column id to department_id
+
+-- Insert into departments
+
+
+
+SELECT * FROM departments
+
+SELECT * FROM students
+
+
+SELECT DISTINCT department_id FROM students;
+SELECT DISTINCT department_id FROM departments;
+
+INSERT INTO departments (department_id, name) VALUES (100, 'Test Dept');
+
+INSERT INTO students (name, department_id) VALUES ('Test Student', 100);
+
+SELECT * FROM students NATURAL JOIN departments;
+
+SELECT * 
+FROM students 
+INNER JOIN departments USING (department_id);
